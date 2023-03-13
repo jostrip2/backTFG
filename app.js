@@ -16,21 +16,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// DB
+const db = require("./models")
+
 // Routes
-/*
-const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-*/
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
 
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+db.sequelize.sync().then((req) => {
+  app.listen(app.get("port"), () => {
+    console.log(`Listening: http://localhost:${app.get("port")}/api`);
+  });
 });
-
-app.listen(app.get("port"), () => {
-  console.log(`Listening: http://localhost:${app.get("port")}`);
-});
-
-module.exports = app;
