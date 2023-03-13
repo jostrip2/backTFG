@@ -45,10 +45,16 @@ const createNewUser = (req, res) => {
 
 const updateOneUser = (req, res) => {
   User.update(
-    { lastName: "Doe" },
+    {
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email,
+      numMobil: req.body.numMobil,
+      rol: req.body.rol,
+    },
     {
       where: {
-        lastName: null,
+        username: req.body.username,
       },
     }
   );
