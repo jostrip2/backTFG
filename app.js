@@ -22,11 +22,10 @@ const db = require("./models")
 // Routes
 const usersRouter = require('./routes/users');
 
-app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
 
 db.sequelize.sync().then((req) => {
   app.listen(app.get("port"), () => {
-    console.log(`Listening: http://localhost:${app.get("port")}/api`);
+    console.log(`Listening: http://localhost:${app.get("port")}/api/users`);
   });
 });

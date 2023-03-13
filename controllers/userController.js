@@ -57,9 +57,14 @@ const updateOneUser = (req, res) => {
         username: req.body.username,
       },
     }
-  );
-  const updatedUser = userService.updateOneUser(req.params.username);
-  res.status(200).send({ data: updatedUser });
+  )
+    .then((usuari) => {
+      res.status(200).json({ data: usuari });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500);
+    });
 };
 
 const deleteOneUser = (req, res) => {
