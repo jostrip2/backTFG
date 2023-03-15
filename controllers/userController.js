@@ -12,7 +12,7 @@ const getAllUsers = (req, res) => {
 };
 
 const getOneUser = (req, res) => {
-  Usuari.findAll({
+  Usuari.findOne({
     where: {
       username: req.params.username,
     },
@@ -59,11 +59,14 @@ const updateOneUser = (req, res) => {
     }
   )
     .then((usuari) => {
-      res.status(200).json({ data: usuari });
+      if (usuari == null) {
+        res.status(404).send();
+      }
+      else res.status(200).json({ data: usuari });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500);
+      res.status(500).send();
     });
 };
 
@@ -76,10 +79,31 @@ const deleteOneUser = (req, res) => {
   res.status(200).send();
 };
 
+const login = (req, res) => {
+  Usuari.findOne({
+    where: {
+      username: req.body.username,
+    },
+  })
+    .then((usuari) => {
+      if (usuari == null) {
+        res.status(404).send();
+      }
+      else if (req.body.password == usuari.password) {
+        res.status(200).json({ data: true });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send();
+    });
+};
+
 module.exports = {
   getAllUsers,
   getOneUser,
   createNewUser,
   updateOneUser,
   deleteOneUser,
+  login
 };
