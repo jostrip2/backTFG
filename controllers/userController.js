@@ -1,13 +1,19 @@
+const bcrypt = require('bcrypt');
+const uuid = require('uuid')
 const { Usuari } = require("../models");
+const authService = require('../services/authService')
 
 const getAllUsers = (req, res) => {
   Usuari.findAll()
     .then((usuaris) => {
-      res.status(200).json({ data: usuaris });
+      if (!usuaris) {
+        res.status(404).json({ message: 'Usuaris no trobats' });
+      }
+      else res.status(200).json({ data: usuaris });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500);
+      res.status(500).send({ message: err });
     });
 };
 
@@ -18,29 +24,41 @@ const getOneUser = (req, res) => {
     },
   })
     .then((usuari) => {
-      res.status(200).json({ data: usuari });
+      if (!usuari) {
+        res.status(404).json({ message: 'Usuari no trobat' });
+      }
+      else res.status(200).json({ data: usuari });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500);
+      res.status(500).send({ message: err });
     });
 };
 
 const createNewUser = (req, res) => {
-  Usuari.create({
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
-    numMobil: req.body.numMobil,
-    rol: req.body.rol,
+  bcrypt.genSalt(10, (err, salt) => {
+    if (!err) {
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
+        if (!err) {
+          Usuari.create({
+            id: uuid.v4(),
+            username: req.body.username,
+            password: hash,
+            email: req.body.email,
+            numMobil: req.body.numMobil,
+            rol: req.body.rol,
+          })
+            .then((usuari) => {
+              res.status(200).json({ data: usuari });
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).send({ message: err });
+            });
+        }
+      })
+    }
   })
-    .then((usuari) => {
-      res.status(200).json({ data: usuari });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500);
-    });
 };
 
 const updateOneUser = (req, res) => {
@@ -59,14 +77,14 @@ const updateOneUser = (req, res) => {
     }
   )
     .then((usuari) => {
-      if (usuari == null) {
-        res.status(404).send();
+      if (!usuari) {
+        res.status(404).json({ message: 'Usuari no trobat' });
       }
       else res.status(200).json({ data: usuari });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).send();
+      res.status(500).send({ message: err });
     });
 };
 
@@ -76,26 +94,29 @@ const deleteOneUser = (req, res) => {
       username: req.params.username,
     },
   });
-  res.status(200).send();
+  res.status(200).json({ message: 'Usuari no trobat' });
 };
 
-const login = (req, res) => {
+const signIn = (req, res) => {
   Usuari.findOne({
     where: {
       username: req.body.username,
     },
   })
     .then((usuari) => {
-      if (usuari == null) {
-        res.status(404).send();
+      if (!usuari) {
+        res.status(404).json({ message: 'Usuari no trobat' });
       }
-      else if (req.body.password == usuari.password) {
-        res.status(200).json({ data: true });
+      else {
+        bcrypt.compare(req.body.password, usuari.password, (err, result) => {
+          if (result) res.status(200).json({ data: authService.createToken(usuari) });
+          else res.status(500).send({ message: err })
+        })
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).send();
+      res.status(500).send({ message: err });
     });
 };
 
@@ -105,5 +126,5 @@ module.exports = {
   createNewUser,
   updateOneUser,
   deleteOneUser,
-  login
+  signIn
 };
