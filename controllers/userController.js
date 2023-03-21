@@ -4,7 +4,9 @@ const { Usuari } = require("../models");
 const authService = require('../services/authService')
 
 const getAllUsers = (req, res) => {
-  Usuari.findAll()
+  Usuari.findAll({
+    limit: 50
+  })
     .then((usuaris) => {
       if (!usuaris) {
         res.status(404).json({ message: 'Usuaris no trobats' });
@@ -109,7 +111,7 @@ const signIn = (req, res) => {
       }
       else {
         bcrypt.compare(req.body.password, usuari.password, (err, result) => {
-          if (result) res.status(200).json({ data: authService.createToken(usuari) });
+          if (result) res.status(200).json({ token: authService.createToken(usuari), rol: usuari.rol });
           else res.status(500).send({ message: err })
         })
       }

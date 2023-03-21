@@ -3,6 +3,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const dotenv = require("dotenv");
+const cors = require('cors');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
 
 // DB
 const db = require("./models")
@@ -26,6 +28,6 @@ app.use('/api/users', usersRouter);
 
 db.sequelize.sync().then((req) => {
   app.listen(app.get("port"), () => {
-    console.log(`Listening: http://localhost:${app.get("port")}/api/users`);
+    console.log(`Listening: http://localhost:${app.get("port")}`);
   });
 });
