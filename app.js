@@ -24,6 +24,12 @@ const db = require("./models")
 // Routes
 const usersRouter = require('./routes/users');
 
+// CORS
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  next();
+});
+
 app.use('/api/users', usersRouter);
 
 db.sequelize.sync().then((req) => {

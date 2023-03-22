@@ -11,7 +11,7 @@ const getAllUsers = (req, res) => {
       if (!usuaris) {
         res.status(404).json({ message: 'Usuaris no trobats' });
       }
-      else res.status(200).json({ data: usuaris });
+      else res.status(200).json(usuaris);
     })
     .catch((err) => {
       console.log(err);
