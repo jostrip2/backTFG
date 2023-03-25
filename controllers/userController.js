@@ -2,9 +2,10 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid')
 const { Usuari } = require("../models");
 const authService = require('../services/authService')
+const sequelize = require('sequelize');
 
 const getAllUsers = (req, res) => {
-  Usuari.findAll()
+  Usuari.findAll({ order: sequelize.col('username') })
     .then((usuaris) => {
       if (!usuaris) {
         res.status(404).json({ message: 'Usuaris no trobats' });
@@ -62,17 +63,40 @@ const createNewUser = (req, res) => {
 };
 
 const updateOneUser = (req, res) => {
+  Usuari.update(
+    {
+      username: req.body.username,
+      email: req.body.email,
+      numMobil: req.body.numMobil,
+      rol: req.body.rol,
+    },
+    {
+      where: {
+        username: req.body.username,
+      },
+    }
+  )
+    .then((usuari) => {
+      console.log('Updated')
+      if (!usuari) {
+        res.status(404).json({ message: 'Usuari no trobat' });
+      }
+      else res.status(200).json({ data: usuari });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: err });
+    });
+};
+
+const updatePassword = (req, res) => {
   bcrypt.genSalt(10, (err, salt) => {
     if (!err) {
       bcrypt.hash(req.body.password, salt, (err, hash) => {
         if (!err) {
           User.update(
             {
-              username: req.body.username,
               password: hash,
-              email: req.body.email,
-              numMobil: req.body.numMobil,
-              rol: req.body.rol,
             },
             {
               where: {
@@ -94,13 +118,15 @@ const updateOneUser = (req, res) => {
       })
     }
   })
-};
+}
 
 const deleteOneUser = (req, res) => {
   User.destroy({
     where: {
       username: req.params.username,
     },
+  }).then(() => {
+    res.status(200).json({ message: 'Usuari eliminat' });
   });
   res.status(200).json({ message: 'Usuari no trobat' });
 };
