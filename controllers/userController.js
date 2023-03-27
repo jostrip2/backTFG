@@ -50,7 +50,7 @@ const createNewUser = (req, res) => {
             rol: req.body.rol,
           })
             .then((usuari) => {
-              res.status(200).json({ data: usuari });
+              res.status(201).json({ data: usuari });
             })
             .catch((err) => {
               console.log(err);
@@ -121,14 +121,32 @@ const updatePassword = (req, res) => {
 }
 
 const deleteOneUser = (req, res) => {
-  User.destroy({
+  Usuari.findOne({
     where: {
       username: req.params.username,
     },
-  }).then(() => {
-    res.status(200).json({ message: 'Usuari eliminat' });
-  });
-  res.status(200).json({ message: 'Usuari no trobat' });
+  })
+    .then((usuari) => {
+      if (!usuari) {
+        res.status(404).json({ message: 'Usuari no trobat' });
+      }
+      else {
+        Usuari.destroy({
+          where: {
+            username: req.params.username,
+          },
+        }).then(() => {
+          res.status(200).json('User deleted');
+        }).catch((err) => {
+          res.status(500).json({ message: err });
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: err });
+    });
+
 };
 
 const signIn = (req, res) => {
