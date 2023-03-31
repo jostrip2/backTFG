@@ -13,6 +13,20 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        nom: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        cognoms: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        nomComplet: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return `${this.nom} ${this.cognoms}`;
+            }
+        },
         email: {
             type: DataTypes.STRING,
         },
@@ -24,6 +38,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         }
     });
+
+    Usuari.hasMany(Usuari, { foreignKey: { name: "clients" } })
+    Usuari.belongsTo(Usuari, { foreignKey: { name: "fisioId", type: DataTypes.UUID }, as: "Fisioterapeuta" });
 
     return Usuari;
 }

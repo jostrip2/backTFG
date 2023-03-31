@@ -48,6 +48,8 @@ const createNewUser = (req, res) => {
             email: req.body.email,
             numMobil: req.body.numMobil,
             rol: req.body.rol,
+            nom: req.body.nom,
+            cognoms: req.body.cognoms
           })
             .then((usuari) => {
               res.status(201).json({ data: usuari });
