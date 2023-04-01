@@ -39,8 +39,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
 
-    Usuari.hasMany(Usuari, { foreignKey: { name: "clients" } })
-    Usuari.belongsTo(Usuari, { foreignKey: { name: "fisioId", type: DataTypes.UUID }, as: "Fisioterapeuta" });
+    Usuari.belongsTo(Usuari, { foreignKey: { allowNull: true }, as: "Fisioterapeuta" });
 
     return Usuari;
 }

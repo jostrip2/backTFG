@@ -5,7 +5,7 @@ const authService = require('../services/authService')
 const sequelize = require('sequelize');
 
 const getAllUsers = (req, res) => {
-  Usuari.findAll({ order: sequelize.col('username') })
+  Usuari.findAll({ order: sequelize.col('username'), include: "Fisioterapeuta" })
     .then((usuaris) => {
       if (!usuaris) {
         res.status(404).json({ message: 'Usuaris no trobats' });
@@ -41,15 +41,18 @@ const createNewUser = (req, res) => {
     if (!err) {
       bcrypt.hash(req.body.password, salt, (err, hash) => {
         if (!err) {
+          const id = uuid.v4()
+          const fisioId = (req.body.fisio == 'null') ? id : req.body.fisio.id
           Usuari.create({
-            id: uuid.v4(),
+            id: id,
             username: req.body.username,
             password: hash,
             email: req.body.email,
             numMobil: req.body.numMobil,
             rol: req.body.rol,
             nom: req.body.nom,
-            cognoms: req.body.cognoms
+            cognoms: req.body.cognoms,
+            FisioterapeutaId: fisioId
           })
             .then((usuari) => {
               res.status(201).json({ data: usuari });
