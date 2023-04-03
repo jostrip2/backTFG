@@ -1,5 +1,15 @@
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-    const Usuari = sequelize.define("Usuari", {
+    class Usuari extends Model {
+        static associate(models) {
+            this.belongsTo(this, { foreignKey: { allowNull: true }, as: "Fisioterapeuta" })
+            this.hasMany(models.AssignacioVideo)
+            this.belongsToMany(models.Video, { through: models.AssignacioVideo })
+        }
+    }
+
+    Usuari.init({
         id: {
             type: DataTypes.UUID,
             primaryKey: true
@@ -37,9 +47,11 @@ module.exports = (sequelize, DataTypes) => {
         rol: {
             type: DataTypes.STRING
         }
-    });
-
-    Usuari.belongsTo(Usuari, { foreignKey: { allowNull: true }, as: "Fisioterapeuta" });
+    },
+        {
+            sequelize,
+            modelName: 'Usuari'
+        })
 
     return Usuari;
 }
