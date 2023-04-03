@@ -37,43 +37,59 @@ const getOneUser = (req, res) => {
 };
 
 const createNewUser = (req, res) => {
-  bcrypt.genSalt(10, (err, salt) => {
-    if (!err) {
-      bcrypt.hash(req.body.password, salt, (err, hash) => {
-        if (!err) {
-          const id = uuid.v4()
-          const fisioId = (req.body.fisio == 'null') ? id : req.body.fisio.id
-          Usuari.create({
-            id: id,
-            username: req.body.username,
-            password: hash,
-            email: req.body.email,
-            numMobil: req.body.numMobil,
-            rol: req.body.rol,
-            nom: req.body.nom,
-            cognoms: req.body.cognoms,
-            FisioterapeutaId: fisioId
-          })
-            .then((usuari) => {
-              res.status(201).json({ data: usuari });
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(500).send({ message: err });
-            });
-        }
-      })
-    }
+  Usuari.findOne({
+    where: {
+      username: req.body.username,
+    },
   })
+    .then((usuari) => {
+      if (!usuari) {
+        bcrypt.genSalt(10, (err, salt) => {
+          if (!err) {
+            bcrypt.hash(req.body.password, salt, (err, hash) => {
+              if (!err) {
+                const id = uuid.v4()
+                const fisioId = (req.body.fisio == 'null') ? id : req.body.fisio.id
+                Usuari.create({
+                  id: id,
+                  username: req.body.username,
+                  password: hash,
+                  email: req.body.email,
+                  numMobil: req.body.numMobil,
+                  rol: req.body.rol,
+                  nom: req.body.nom,
+                  cognoms: req.body.cognoms,
+                  FisioterapeutaId: fisioId
+                })
+                  .then((usuari) => {
+                    res.status(201).json({ data: usuari });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    res.status(500).send({ message: err });
+                  });
+              }
+            })
+          }
+        })
+      }
+      else res.status(200).json({ data: usuari, code: 1 });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: err });
+    });
+
 };
 
 const updateOneUser = (req, res) => {
   Usuari.update(
     {
-      username: req.body.username,
+      nom: req.body.nom,
+      cognoms: req.body.cognoms,
       email: req.body.email,
       numMobil: req.body.numMobil,
-      rol: req.body.rol,
+      FisioterapeutaId: req.body.FisioterapeutaId
     },
     {
       where: {
@@ -182,6 +198,7 @@ module.exports = {
   getOneUser,
   createNewUser,
   updateOneUser,
+  updatePassword,
   deleteOneUser,
   signIn
 };
