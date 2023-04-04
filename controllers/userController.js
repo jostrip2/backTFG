@@ -4,7 +4,7 @@ const { Usuari } = require("../models");
 const authService = require('../services/authService')
 const sequelize = require('sequelize');
 
-const getAllUsers = (req, res) => {
+const getUsers = (req, res) => {
   Usuari.findAll({ order: sequelize.col('username'), include: "Fisioterapeuta" })
     .then((usuaris) => {
       if (!usuaris) {
@@ -18,7 +18,7 @@ const getAllUsers = (req, res) => {
     });
 };
 
-const getOneUser = (req, res) => {
+const getUser = (req, res) => {
   Usuari.findOne({
     where: {
       username: req.params.username,
@@ -36,7 +36,7 @@ const getOneUser = (req, res) => {
     });
 };
 
-const createNewUser = (req, res) => {
+const createUser = (req, res) => {
   Usuari.findOne({
     where: {
       username: req.body.username,
@@ -82,7 +82,7 @@ const createNewUser = (req, res) => {
 
 };
 
-const updateOneUser = (req, res) => {
+const updateUser = (req, res) => {
   Usuari.update(
     {
       nom: req.body.nom,
@@ -141,7 +141,7 @@ const updatePassword = (req, res) => {
   })
 }
 
-const deleteOneUser = (req, res) => {
+const deleteUser = (req, res) => {
   Usuari.findOne({
     where: {
       username: req.params.username,
@@ -157,7 +157,7 @@ const deleteOneUser = (req, res) => {
             username: req.params.username,
           },
         }).then(() => {
-          res.status(200).json('User deleted');
+          res.status(200).json('Usuari eliminat');
         }).catch((err) => {
           res.status(500).json({ message: err });
         });
@@ -194,11 +194,11 @@ const signIn = (req, res) => {
 };
 
 module.exports = {
-  getAllUsers,
-  getOneUser,
-  createNewUser,
-  updateOneUser,
+  getUsers,
+  getUser,
+  createUser,
+  updateUser,
   updatePassword,
-  deleteOneUser,
+  deleteUser,
   signIn
 };

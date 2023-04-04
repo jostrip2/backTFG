@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     class Video extends Model {
         static associate(models) {
             this.belongsToMany(models.Usuari, { through: models.AssignacioVideo })
-            this.hasMany(models.AssignacioVideo)
+            this.hasMany(models.AssignacioVideo, { as: "Assignacio" })
         }
     }
 
@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.UUID,
             primaryKey: true
+        },
+        nom: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
         link: {
             type: DataTypes.STRING,
@@ -24,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         areaExercici: {
             type: DataTypes.ENUM,
-            values: ['Braços', 'Tronc', 'Cames', 'Coll']
+            values: ['Bracos', 'Tronc', 'Cames', 'Coll']
         }
     }, {
         sequelize,

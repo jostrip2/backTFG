@@ -22,7 +22,8 @@ app.use(cors());
 const db = require("./models")
 
 // Routes
-const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/usersRoutes');
+const videosRouter = require('./routes/videosRoutes');
 
 // CORS
 app.use(function (req, res, next) {
@@ -31,8 +32,9 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api/users', usersRouter);
+app.use('/api/videos', videosRouter);
 
-db.sequelize.sync().then((req) => {
+db.sequelize.sync({ alter: true }).then((req) => {
   app.listen(app.get("port"), () => {
     console.log(`Listening: http://localhost:${app.get("port")}`);
   });
