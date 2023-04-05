@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        link: {
+        codi: {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         areaExercici: {
             type: DataTypes.ENUM,
-            values: ['Bracos', 'Tronc', 'Cames', 'Coll']
+            values: ['Braços', 'Tronc', 'Cames', 'Coll']
         }
     }, {
         sequelize,

@@ -35,12 +35,13 @@ const getVideo = (req, res) => {
 };
 
 const createVideo = (req, res) => {
+  console.log(req.body);
   Video.create({
     id: uuid.v4(),
     nom: req.body.nom,
-    link: req.body.link,
+    codi: req.body.codi,
     descripcio: req.body.descripcio,
-    area: req.body.area
+    areaExercici: req.body.areaExercici
   })
     .then((video) => {
       res.status(201).json({ data: video });
