@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const uuid = require('uuid')
-const { Usuari } = require("../models");
+const { Usuari } = require("../db/models");
 const authService = require('../services/authService')
+const bcryptService = require('../services/bcryptService')
 const sequelize = require('sequelize');
 
 const getUsers = (req, res) => {
@@ -44,34 +45,27 @@ const createUser = (req, res) => {
   })
     .then((usuari) => {
       if (!usuari) {
-        bcrypt.genSalt(10, (err, salt) => {
-          if (!err) {
-            bcrypt.hash(req.body.password, salt, (err, hash) => {
-              if (!err) {
-                const id = uuid.v4()
-                const fisioId = (req.body.fisio == 'null') ? id : req.body.fisio.id
-                Usuari.create({
-                  id: id,
-                  username: req.body.username,
-                  password: hash,
-                  email: req.body.email,
-                  numMobil: req.body.numMobil,
-                  rol: req.body.rol,
-                  nom: req.body.nom,
-                  cognoms: req.body.cognoms,
-                  FisioterapeutaId: fisioId
-                })
-                  .then((usuari) => {
-                    res.status(201).json({ data: usuari });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    res.status(500).send({ message: err });
-                  });
-              }
-            })
-          }
+        const password = bcryptService.hashPassword(req.body.password);
+        const id = uuid.v4()
+        const fisioId = (req.body.fisio == 'null') ? id : req.body.fisio.id
+        Usuari.create({
+          id: id,
+          username: req.body.username,
+          password: password,
+          email: req.body.email,
+          numMobil: req.body.numMobil,
+          rol: req.body.rol,
+          nom: req.body.nom,
+          cognoms: req.body.cognoms,
+          FisioterapeutaId: fisioId
         })
+          .then((usuari) => {
+            res.status(201).json({ data: usuari });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).send({ message: err });
+          });
       }
       else res.status(200).json({ data: usuari, code: 1 });
     })
@@ -111,34 +105,27 @@ const updateUser = (req, res) => {
 };
 
 const updatePassword = (req, res) => {
-  bcrypt.genSalt(10, (err, salt) => {
-    if (!err) {
-      bcrypt.hash(req.body.password, salt, (err, hash) => {
-        if (!err) {
-          User.update(
-            {
-              password: hash,
-            },
-            {
-              where: {
-                username: req.body.username,
-              },
-            }
-          )
-            .then((usuari) => {
-              if (!usuari) {
-                res.status(404).json({ message: 'Usuari no trobat' });
-              }
-              else res.status(200).json({ data: usuari });
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(500).send({ message: err });
-            });
-        }
-      })
+  const password = bcryptService.hashPassword(req.body.password);
+  User.update(
+    {
+      password: password,
+    },
+    {
+      where: {
+        username: req.body.username,
+      },
     }
-  })
+  )
+    .then((usuari) => {
+      if (!usuari) {
+        res.status(404).json({ message: 'Usuari no trobat' });
+      }
+      else res.status(200).json({ data: usuari });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: err });
+    });
 }
 
 const deleteUser = (req, res) => {
@@ -181,10 +168,14 @@ const signIn = (req, res) => {
         res.status(404).json({ message: 'Usuari no trobat' });
       }
       else {
-        bcrypt.compare(req.body.password, usuari.password, (err, result) => {
-          if (result) res.status(200).json({ token: authService.createToken(usuari), rol: usuari.rol });
-          else res.status(500).send({ message: err })
-        })
+        let esIgual = bcryptService.comparePassword(req.body.password, usuari.password);
+        console.log(esIgual)
+        if (esIgual) {
+          res.status(200).json({ token: authService.createToken(usuari), rol: usuari.rol });
+        }
+        else {
+          res.status(500).send({ message: err })
+        }
       }
     })
     .catch((err) => {

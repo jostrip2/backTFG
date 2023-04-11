@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 // DB
-const db = require("./models")
+const db = require("./db/models")
 
 // Routes
 const usersRouter = require('./routes/usersRoutes');

@@ -1,5 +1,5 @@
 const uuid = require('uuid')
-const { Video } = require("../models");
+const { Video } = require("../db/models");
 const sequelize = require('sequelize');
 
 const getVideos = (req, res) => {
