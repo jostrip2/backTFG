@@ -24,6 +24,7 @@ const db = require("./db/models")
 // Routes
 const usersRouter = require('./routes/usersRoutes');
 const videosRouter = require('./routes/videosRoutes');
+const assignacionsRouter = require('./routes/assignacionsRoutes');
 
 // CORS
 app.use(function (req, res, next) {
@@ -33,6 +34,7 @@ app.use(function (req, res, next) {
 
 app.use('/api/users', usersRouter);
 app.use('/api/videos', videosRouter);
+app.use('/api/assignacions', assignacionsRouter);
 
 db.sequelize.sync({ alter: true }).then((req) => {
   app.listen(app.get("port"), () => {

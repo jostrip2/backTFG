@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const uuid = require('uuid')
 const { Usuari } = require("../db/models");
 const authService = require('../services/authService')

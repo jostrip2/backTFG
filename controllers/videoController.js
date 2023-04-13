@@ -20,7 +20,7 @@ const getVideo = (req, res) => {
   Video.findOne({
     where: {
       id: req.params.id
-    },
+    }
   })
     .then((video) => {
       if (!video) {
@@ -35,7 +35,6 @@ const getVideo = (req, res) => {
 };
 
 const createVideo = (req, res) => {
-  console.log(req.body);
   Video.create({
     id: uuid.v4(),
     nom: req.body.nom,
