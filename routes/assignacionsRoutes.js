@@ -7,6 +7,8 @@ router.get('/:idClient', /*auth,*/ assignacioController.getAssignacionsByClient)
 
 router.get('/:idVideo', /*auth,*/ assignacioController.getAssignacionsByVideo);
 
+router.get('/:id', /*auth,*/ assignacioController.getAssignacionsById);
+
 router.post('/', /*auth,*/ assignacioController.createAssignacio);
 
 // router.patch('/', /*auth,*/ assignacioController.updateAssignacio);

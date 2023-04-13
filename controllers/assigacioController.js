@@ -38,6 +38,24 @@ const getAssignacionsByVideo = (req, res) => {
         });
 };
 
+const getAssignacionsById = (req, res) => {
+    AssignacioVideo.findOne({
+        where: {
+            id: req.params.id,
+        },
+    })
+        .then((assignacio) => {
+            if (!assignacio) {
+                res.status(404).json({ message: 'Assignacio no trobada' });
+            }
+            else res.status(200).json({ data: assignacio });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send({ message: err });
+        });
+};
+
 const createAssignacio = (req, res) => {
     AssignacioVideo.create({
         id: uuid.v4(),
@@ -66,6 +84,7 @@ const deleteAssignacio = (req, res) => {
 module.exports = {
     getAssignacionsByClient,
     getAssignacionsByVideo,
+    getAssignacionsById,
     updateAssignacio,
     createAssignacio,
     deleteAssignacio
