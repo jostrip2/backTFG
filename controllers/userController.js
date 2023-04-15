@@ -91,7 +91,6 @@ const updateUser = (req, res) => {
     }
   )
     .then((usuari) => {
-      console.log('Updated')
       if (!usuari) {
         res.status(404).json({ message: 'Usuari no trobat' });
       }
@@ -168,7 +167,6 @@ const signIn = (req, res) => {
       }
       else {
         let esIgual = bcryptService.comparePassword(req.body.password, usuari.password);
-        console.log(esIgual)
         if (esIgual) {
           res.status(200).json({ token: authService.createToken(usuari), rol: usuari.rol });
         }

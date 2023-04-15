@@ -66,7 +66,6 @@ const updateVideo = (req, res) => {
     }
   )
     .then((video) => {
-      console.log('Updated')
       if (!video) {
         res.status(404).json({ message: 'Video no trobat' });
       }
