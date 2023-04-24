@@ -1,13 +1,18 @@
 const uuid = require('uuid')
-const { AssignacioVideo } = require("../db/models");
 const sequelize = require('sequelize');
 const moment = require('moment');
+
+const { Video, AssignacioVideo } = require("../db/models");
 
 const getAssignacionsByClient = (req, res) => {
     AssignacioVideo.findAll({
         where: {
-            id: req.params.idClient
-        }
+            UsuariId: req.params.idClient
+        },
+        order: [
+            ['dia', 'ASC']
+        ],
+        include: Video
     })
         .then((assignacions) => {
             if (!assignacions) {
@@ -83,7 +88,31 @@ const updateAssignacio = (req, res) => {
 };
 
 const deleteAssignacio = (req, res) => {
-
+    AssignacioVideo.findOne({
+        where: {
+            id: req.params.id,
+        },
+    })
+        .then((assignacio) => {
+            if (!assignacio) {
+                res.status(404).json({ message: 'Assignacio no trobada' });
+            }
+            else {
+                AssignacioVideo.destroy({
+                    where: {
+                        id: req.params.id,
+                    },
+                }).then(() => {
+                    res.status(200).json('Assignacio eliminada');
+                }).catch((err) => {
+                    res.status(500).json({ message: err });
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send({ message: err });
+        });
 };
 
 module.exports = {
