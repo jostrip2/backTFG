@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         dia: {
             type: DataTypes.DATEONLY,
-            allowNull: false
+            allowNull: false,
+            primaryKey: true
         },
         realitzat: {
             type: DataTypes.BOOLEAN,

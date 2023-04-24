@@ -9,7 +9,7 @@ router.get('/:idVideo', /*auth,*/ assignacioController.getAssignacionsByVideo);
 
 router.get('/:id', /*auth,*/ assignacioController.getAssignacionsById);
 
-router.post('/', /*auth,*/ assignacioController.createAssignacio);
+router.post('/', /*auth,*/ assignacioController.createAssignacions);
 
 // router.patch('/', /*auth,*/ assignacioController.updateAssignacio);
 

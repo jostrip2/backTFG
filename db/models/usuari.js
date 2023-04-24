@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             this.belongsTo(this, { foreignKey: { allowNull: true }, as: "Fisioterapeuta" })
             this.hasMany(models.AssignacioVideo, { as: "Assignacio" })
-            // this.belongsToMany(models.Video, { through: models.AssignacioVideo })
         }
     }
 

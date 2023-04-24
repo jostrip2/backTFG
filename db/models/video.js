@@ -3,7 +3,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Video extends Model {
         static associate(models) {
-            this.belongsToMany(models.Usuari, { through: models.AssignacioVideo })
             this.hasMany(models.AssignacioVideo, { as: "Assignacio" })
         }
     }

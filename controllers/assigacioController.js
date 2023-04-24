@@ -1,6 +1,7 @@
 const uuid = require('uuid')
 const { AssignacioVideo } = require("../db/models");
 const sequelize = require('sequelize');
+const moment = require('moment');
 
 const getAssignacionsByClient = (req, res) => {
     AssignacioVideo.findAll({
@@ -56,21 +57,25 @@ const getAssignacionsById = (req, res) => {
         });
 };
 
-const createAssignacio = (req, res) => {
-    AssignacioVideo.create({
-        id: uuid.v4(),
-        dia: req.body.dia,
-        realitzat: req.body.realitzat,
-        UsuariId: req.body.UsuariId,
-        VideoId: req.body.VideoId
+const createAssignacions = (req, res) => {
+    const assignacions = req.body.selectedDates.map((date) => {
+        return {
+            id: uuid.v4(),
+            dia: moment(date).format('YYYY-MM-DD'),
+            realitzat: false,
+            UsuariId: req.body.UsuariId,
+            VideoId: req.body.VideoId
+        }
     })
-        .then((assignacio) => {
-            res.status(201).json({ data: assignacio });
+
+    AssignacioVideo.bulkCreate(assignacions)
+        .then((assignacions) => {
+            res.status(201).json({ data: assignacions })
         })
         .catch((err) => {
             console.log(err);
-            res.status(500).send({ message: err });
-        });
+            res.status(500).send({ messages: err });
+        })
 };
 
 const updateAssignacio = (req, res) => {
@@ -86,6 +91,6 @@ module.exports = {
     getAssignacionsByVideo,
     getAssignacionsById,
     updateAssignacio,
-    createAssignacio,
+    createAssignacions,
     deleteAssignacio
 };
