@@ -7,30 +7,12 @@ const { Video, AssignacioVideo } = require("../db/models");
 const getAssignacionsByClient = (req, res) => {
     AssignacioVideo.findAll({
         where: {
-            UsuariId: req.params.idClient
+            UsuariId: req.params.id
         },
         order: [
             ['dia', 'ASC']
         ],
         include: Video
-    })
-        .then((assignacions) => {
-            if (!assignacions) {
-                res.status(404).json({ message: 'No hi ha assignacions' });
-            }
-            else res.status(200).json(assignacions);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).send({ message: err });
-        });
-};
-
-const getAssignacionsByVideo = (req, res) => {
-    AssignacioVideo.findAll({
-        where: {
-            id: req.params.idVideo
-        }
     })
         .then((assignacions) => {
             if (!assignacions) {
@@ -83,10 +65,6 @@ const createAssignacions = (req, res) => {
         })
 };
 
-const updateAssignacio = (req, res) => {
-
-};
-
 const deleteAssignacio = (req, res) => {
     AssignacioVideo.findOne({
         where: {
@@ -117,9 +95,7 @@ const deleteAssignacio = (req, res) => {
 
 module.exports = {
     getAssignacionsByClient,
-    getAssignacionsByVideo,
     getAssignacionsById,
-    updateAssignacio,
     createAssignacions,
     deleteAssignacio
 };
