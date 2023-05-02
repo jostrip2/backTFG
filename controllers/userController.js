@@ -168,7 +168,7 @@ const signIn = (req, res) => {
       else {
         let esIgual = bcryptService.comparePassword(req.body.password, usuari.password);
         if (esIgual) {
-          res.status(200).json({ token: authService.createToken(usuari), rol: usuari.rol });
+          res.status(200).json({ id: usuari.id, token: authService.createToken(usuari), rol: usuari.rol });
         }
         else {
           res.status(500).send({ message: err })

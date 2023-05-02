@@ -13,7 +13,7 @@ module.exports = {
     let usuaris = [
       {
         id: adminId,
-        username: 'admin2',
+        username: 'admin',
         password: password,
         email: faker.internet.email(),
         numMobil: faker.phone.phoneNumber('6########'),
@@ -26,7 +26,7 @@ module.exports = {
       },
       {
         id: uuid.v4(),
-        username: faker.internet.userName(),
+        username: 'client1',
         password: password,
         email: faker.internet.email(),
         numMobil: faker.phone.phoneNumber('6########'),
@@ -39,7 +39,7 @@ module.exports = {
       },
       {
         id: uuid.v4(),
-        username: faker.internet.userName(),
+        username: 'client2',
         password: password,
         email: faker.internet.email(),
         numMobil: faker.phone.phoneNumber('6########'),
@@ -52,7 +52,7 @@ module.exports = {
       },
       {
         id: uuid.v4(),
-        username: faker.internet.userName(),
+        username: 'client3',
         password: password,
         email: faker.internet.email(),
         numMobil: faker.phone.phoneNumber('6########'),
