@@ -26,11 +26,19 @@ const usersRouter = require('./routes/usersRoutes');
 const videosRouter = require('./routes/videosRoutes');
 const assignacionsRouter = require('./routes/assignacionsRoutes');
 
-// CORS
+// Cross-origin resource sharing (CORS)
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   next();
 });
+
+// Content Security Policy (CSP)
+app.use(function (req, res, next) {
+  res.setHeader('Content-Security-Policy-Report-Only',
+    "default-src *; script-src *; style-src *; font-src *; img-src *; frame-src *; frame-ancestors *");
+  next();
+  // 'https://accounts.google.com/' because an ancestor violates the following Content Security Policy directive: "frame-ancestors https://drive.google.com".
+})
 
 app.use('/api/users', usersRouter);
 app.use('/api/videos', videosRouter);
