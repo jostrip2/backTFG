@@ -11,4 +11,6 @@ router.post('/', auth, assignacioController.createAssignacions);
 
 router.delete('/:id', auth, assignacioController.deleteAssignacio);
 
+router.patch('/', auth, assignacioController.setRealitzacio);
+
 module.exports = router;

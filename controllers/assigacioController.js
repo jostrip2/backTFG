@@ -93,9 +93,28 @@ const deleteAssignacio = (req, res) => {
         });
 };
 
+const setRealitzacio = (req, res) => {
+    AssignacioVideo.update({
+        realitzat: req.body.realitzacio
+    },
+        {
+            where: {
+                id: req.body.id
+            }
+        })
+        .then(() => {
+            res.status(200);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send({ message: err });
+        });
+};
+
 module.exports = {
     getAssignacionsByClient,
     getAssignacionsById,
     createAssignacions,
-    deleteAssignacio
+    deleteAssignacio,
+    setRealitzacio
 };
