@@ -34,10 +34,9 @@ app.use(function (req, res, next) {
 
 // Content Security Policy (CSP)
 app.use(function (req, res, next) {
-  res.setHeader('Content-Security-Policy-Report-Only',
-    "default-src *; script-src *; style-src *; font-src *; img-src *; frame-src *; frame-ancestors *");
+  res.setHeader('Content-Security-Policy',
+    "default-src *; script-src *; style-src *; font-src *; img-src *; frame-src https://youtube.googleapis.com *; frame-ancestors https://youtube.googleapis.com *");
   next();
-  // 'https://accounts.google.com/' because an ancestor violates the following Content Security Policy directive: "frame-ancestors https://drive.google.com".
 })
 
 app.use('/api/users', usersRouter);
