@@ -25,6 +25,7 @@ const db = require("./db/models")
 const usersRouter = require('./routes/usersRoutes');
 const videosRouter = require('./routes/videosRoutes');
 const assignacionsRouter = require('./routes/assignacionsRoutes');
+const missatgesRouter = require('./routes/missatgesRoutes');
 
 // Cross-origin resource sharing (CORS)
 app.use(function (req, res, next) {
@@ -42,6 +43,7 @@ app.use(function (req, res, next) {
 app.use('/api/users', usersRouter);
 app.use('/api/videos', videosRouter);
 app.use('/api/assignacions', assignacionsRouter);
+app.use('/api/missatges', missatgesRouter);
 
 db.sequelize.sync({ alter: true }).then((req) => {
   app.listen(app.get("port"), () => {
