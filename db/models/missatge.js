@@ -3,8 +3,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Missatge extends Model {
         static associate(models) {
-            this.belongsTo(models.Usuari, { as: "emisorId" });
-            this.belongsTo(models.Usuari, { as: "receptorId" });
+            this.belongsTo(models.Usuari, { as: "emisor" });
+            this.belongsTo(models.Usuari, { as: "receptor" });
         }
     }
 
