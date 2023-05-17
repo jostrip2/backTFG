@@ -3,7 +3,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Missatge extends Model {
         static associate(models) {
-            this.belongsTo(models.Usuari, { as: "emisor" });
+            this.belongsTo(models.Usuari, { as: "emissor" });
             this.belongsTo(models.Usuari, { as: "receptor" });
         }
     }
@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.UUID,
             primaryKey: true
+        },
+        titol: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
         missatge: {
             type: DataTypes.STRING,

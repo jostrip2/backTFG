@@ -7,8 +7,8 @@ const getMissatgeById = (req, res) => {
         where: {
             id: req.params.id,
         },
-        include: "emisorId",
-        include: "receptorId"
+        include: "emissor",
+        include: "receptor"
     }).then((missatge) => {
         if (!missatge) {
             res.status(404).json({ message: 'Missatges no trobats' });
@@ -20,13 +20,13 @@ const getMissatgeById = (req, res) => {
     });
 };
 
-const getMissatgesByEmisor = (req, res) => {
-    Missatge.findOne({
+const getMissatgesByEmissor = (req, res) => {
+    Missatge.findAll({
         where: {
-            emisorId: req.params.emisorId
+            emissorId: req.params.id
         },
-        include: "emisorId",
-        include: "receptorId"
+        include: "emissor",
+        include: "receptor"
     }).then((missatges) => {
         if (!missatges) {
             res.status(404).json({ message: 'Missatges no trobats' });
@@ -39,12 +39,12 @@ const getMissatgesByEmisor = (req, res) => {
 };
 
 const getMissatgesByReceptor = (req, res) => {
-    Missatge.findOne({
+    Missatge.findAll({
         where: {
-            receptorId: req.params.receptorId
+            receptorId: req.params.id
         },
-        include: "emisorId",
-        include: "receptorId"
+        include: "emissor",
+        include: "receptor"
     }).then((missatges) => {
         if (!missatges) {
             res.status(404).json({ message: 'Missatges no trobats' });
@@ -58,12 +58,13 @@ const getMissatgesByReceptor = (req, res) => {
 
 const createMissatge = (req, res) => {
     Missatge.create({
-        id: req.body.id,
+        id: uuid.v4(),
+        titol: req.body.titol,
         missatge: req.body.missatge,
         data: new Date(),
         llegit: false,
-        emisorId: req.body.emisorId,
-        receptorId: req.body.receptorId
+        emissorId: req.body.emissor,
+        receptorId: req.body.receptor
     }).then((missatge) => {
         res.status(201).json({ data: missatge });
     }).catch((err) => {
@@ -99,10 +100,25 @@ const deleteMissatge = (req, res) => {
 
 };
 
+const marcarLlegit = (req, res) => {
+    Missatge.update({ llegit: req.body.llegit },
+        {
+            where: {
+                id: req.body.id
+            }
+        }).then(() => {
+            res.status(200);
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send({ message: err });
+        });
+};
+
 module.exports = {
     getMissatgeById,
-    getMissatgesByEmisor,
+    getMissatgesByEmissor,
     getMissatgesByReceptor,
     createMissatge,
-    deleteMissatge
+    deleteMissatge,
+    marcarLlegit
 };
