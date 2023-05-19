@@ -17,5 +17,6 @@ router.delete('/:username', auth, userController.deleteUser);
 
 router.post('/signIn', userController.signIn);
 
+router.post('/checkPass', userController.checkPassword);
 
 module.exports = router;

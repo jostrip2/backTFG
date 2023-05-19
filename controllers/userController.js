@@ -28,7 +28,7 @@ const getUser = (req, res) => {
       if (!usuari) {
         res.status(404).json({ message: 'Usuari no trobat' });
       }
-      else res.status(200).json({ data: usuari });
+      else res.status(200).json(usuari);
     })
     .catch((err) => {
       console.log(err);
@@ -59,7 +59,7 @@ const createUser = (req, res) => {
           FisioterapeutaId: fisioId
         })
           .then((usuari) => {
-            res.status(201).json({ data: usuari });
+            res.status(201).json(usuari);
           })
           .catch((err) => {
             console.log(err);
@@ -89,22 +89,20 @@ const updateUser = (req, res) => {
         username: req.body.username,
       },
     }
-  )
-    .then((usuari) => {
-      if (!usuari) {
-        res.status(404).json({ message: 'Usuari no trobat' });
-      }
-      else res.status(200).json({ data: usuari });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: err });
-    });
+  ).then((usuari) => {
+    if (!usuari) {
+      res.status(404).json({ message: 'Usuari no trobat' });
+    }
+    else res.status(200).json(usuari);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({ message: err });
+  });
 };
 
 const updatePassword = (req, res) => {
   const password = bcryptService.hashPassword(req.body.password);
-  User.update(
+  Usuari.update(
     {
       password: password,
     },
@@ -113,17 +111,15 @@ const updatePassword = (req, res) => {
         username: req.body.username,
       },
     }
-  )
-    .then((usuari) => {
-      if (!usuari) {
-        res.status(404).json({ message: 'Usuari no trobat' });
-      }
-      else res.status(200).json({ data: usuari });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: err });
-    });
+  ).then((usuari) => {
+    if (!usuari) {
+      res.status(404).json({ message: 'Usuari no trobat' });
+    }
+    else res.status(200).json(usuari);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({ message: err });
+  });
 }
 
 const deleteUser = (req, res) => {
@@ -161,25 +157,41 @@ const signIn = (req, res) => {
       username: req.body.username,
     },
     include: "Fisioterapeuta"
-  })
-    .then((usuari) => {
-      if (!usuari) {
-        res.status(404).json({ message: 'Usuari no trobat' });
+  }).then((usuari) => {
+    if (!usuari) {
+      res.status(404).json({ message: 'Usuari no trobat' });
+    }
+    else {
+      let esIgual = bcryptService.comparePassword(req.body.password, usuari.password);
+      if (esIgual) {
+        res.status(200).json({ id: usuari.id, token: authService.createToken(usuari), rol: usuari.rol, fisio: usuari.Fisioterapeuta });
       }
       else {
-        let esIgual = bcryptService.comparePassword(req.body.password, usuari.password);
-        if (esIgual) {
-          res.status(200).json({ id: usuari.id, token: authService.createToken(usuari), rol: usuari.rol, fisio: usuari.Fisioterapeuta });
-        }
-        else {
-          res.status(500).send({ message: err })
-        }
+        res.status(500).send({ message: err })
       }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: err });
-    });
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({ message: err });
+  });
+};
+
+const checkPassword = (req, res) => {
+  Usuari.findOne({
+    where: {
+      username: req.body.username,
+    }
+  }).then((usuari) => {
+    if (!usuari) {
+      res.status(404).json({ message: 'Contrasenya no trobada' });
+    }
+    else {
+      res.status(200).json(bcryptService.comparePassword(req.body.password, usuari.password));
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({ message: err });
+  });
 };
 
 module.exports = {
@@ -189,5 +201,6 @@ module.exports = {
   updateUser,
   updatePassword,
   deleteUser,
-  signIn
+  signIn,
+  checkPassword
 };
