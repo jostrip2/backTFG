@@ -25,7 +25,6 @@ const getMissatgesByEmissor = (req, res) => {
         where: {
             emissorId: req.params.id
         },
-        include: "emissor",
         include: "receptor"
     }).then((missatges) => {
         if (!missatges) {
@@ -44,7 +43,6 @@ const getMissatgesByReceptor = (req, res) => {
             receptorId: req.params.id
         },
         include: "emissor",
-        include: "receptor"
     }).then((missatges) => {
         if (!missatges) {
             res.status(404).json({ message: 'Missatges no trobats' });
