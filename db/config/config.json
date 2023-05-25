@@ -2,7 +2,7 @@
   "development": {
     "username": "admin",
     "password": "DP6jgNm3X08f9E444MHo0GQuKqIxt85a",
-    "database": "fisio_db",
+    "database": "fisio_bd",
     "host": "dpg-chnpchak728jv5chqaig-a.frankfurt-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
@@ -12,7 +12,7 @@
   "test": {
     "username": "admin",
     "password": "DP6jgNm3X08f9E444MHo0GQuKqIxt85a",
-    "database": "fisio_db",
+    "database": "fisio_bd",
     "host": "dpg-chnpchak728jv5chqaig-a.frankfurt-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
@@ -22,7 +22,7 @@
   "production": {
     "username": "admin",
     "password": "DP6jgNm3X08f9E444MHo0GQuKqIxt85a",
-    "database": "fisio_db",
+    "database": "fisio_bd",
     "host": "dpg-chnpchak728jv5chqaig-a.frankfurt-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
