@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "admin",
-    "password": "eMLzt41YauNQL1QJS0efxK3lxwiIobP0",
+    "password": "DP6jgNm3X08f9E444MHo0GQuKqIxt85a",
     "database": "fisio_db",
-    "host": "dpg-cg5ms6ceoogsv90fdit0-a.frankfurt-postgres.render.com",
+    "host": "dpg-chnpchak728jv5chqaig-a.frankfurt-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": true
@@ -11,9 +11,9 @@
   },
   "test": {
     "username": "admin",
-    "password": "eMLzt41YauNQL1QJS0efxK3lxwiIobP0",
+    "password": "DP6jgNm3X08f9E444MHo0GQuKqIxt85a",
     "database": "fisio_db",
-    "host": "dpg-cg5ms6ceoogsv90fdit0-a.frankfurt-postgres.render.com",
+    "host": "dpg-chnpchak728jv5chqaig-a.frankfurt-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": true
@@ -21,9 +21,9 @@
   },
   "production": {
     "username": "admin",
-    "password": "eMLzt41YauNQL1QJS0efxK3lxwiIobP0",
+    "password": "DP6jgNm3X08f9E444MHo0GQuKqIxt85a",
     "database": "fisio_db",
-    "host": "dpg-cg5ms6ceoogsv90fdit0-a.frankfurt-postgres.render.com",
+    "host": "dpg-chnpchak728jv5chqaig-a.frankfurt-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": true
