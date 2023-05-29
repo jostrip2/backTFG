@@ -35,15 +35,31 @@ const getVideo = (req, res) => {
 };
 
 const createVideo = (req, res) => {
-  Video.create({
-    id: uuid.v4(),
-    nom: req.body.nom,
-    codi: req.body.codi,
-    descripcio: req.body.descripcio,
-    areaExercici: req.body.areaExercici
+  Video.findOne({
+    where: {
+      codi: req.body.codi,
+    },
   })
     .then((video) => {
-      res.status(201).json({ data: video });
+      if (!video) {
+        Video.create({
+          id: uuid.v4(),
+          nom: req.body.nom,
+          codi: req.body.codi,
+          descripcio: req.body.descripcio,
+          areaExercici: req.body.areaExercici
+        })
+          .then((video) => {
+            res.status(201).json({ data: video });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).send({ message: err });
+          });
+      }
+      else {
+        res.status(200).json({ data: video, code: 1 });
+      }
     })
     .catch((err) => {
       console.log(err);
