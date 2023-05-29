@@ -68,29 +68,42 @@ const createVideo = (req, res) => {
 };
 
 const updateVideo = (req, res) => {
-  Video.update(
-    {
-      nom: req.body.nom,
-      link: req.body.link,
-      descripcio: req.body.descripcio,
-      area: req.body.area
+  Video.findOne({
+    where: {
+      codi: req.body.codi,
     },
-    {
-      where: {
-        id: req.body.id,
-      },
+  }).then((video) => {
+    if (!video) {
+      Video.update(
+        {
+          nom: req.body.nom,
+          link: req.body.link,
+          descripcio: req.body.descripcio,
+          area: req.body.area
+        },
+        {
+          where: {
+            id: req.body.id,
+          },
+        }
+      ).then((video) => {
+        if (!video) {
+          res.status(404).json({ message: 'Video no trobat' });
+        }
+        else res.status(200).json({ data: video });
+      }).catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: err });
+      });
     }
-  )
-    .then((video) => {
-      if (!video) {
-        res.status(404).json({ message: 'Video no trobat' });
-      }
-      else res.status(200).json({ data: video });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: err });
-    });
+    else {
+      res.status(200).json({ data: video, code: 1 });
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({ message: err });
+  });
+
 };
 
 const deleteVideo = (req, res) => {
