@@ -12,13 +12,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             primaryKey: true
         },
-        nom: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         codi: {
             type: DataTypes.STRING,
-            unique: true,
+            primaryKey: true
+        },
+        nom: {
+            type: DataTypes.STRING,
             allowNull: false
         },
         descripcio: {

@@ -36,6 +36,27 @@ const getUser = (req, res) => {
     });
 };
 
+const getClientsFisio = (req, res) => {
+  Usuari.findAll({
+    where: {
+      FisioterapeutaId: req.params.id,
+      rol: 'Client'
+    },
+    order: sequelize.col('username'),
+    include: "Fisioterapeuta"
+  })
+    .then((usuaris) => {
+      if (!usuaris) {
+        res.status(404).json({ message: 'Usuaris no trobats' });
+      }
+      else res.status(200).json(usuaris);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: err });
+    });
+};
+
 const createUser = (req, res) => {
   Usuari.findOne({
     where: {
@@ -197,6 +218,7 @@ const checkPassword = (req, res) => {
 module.exports = {
   getUsers,
   getUser,
+  getClientsFisio,
   createUser,
   updateUser,
   updatePassword,

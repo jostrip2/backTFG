@@ -7,6 +7,8 @@ router.get('/', auth, userController.getUsers);
 
 router.get('/:username', auth, userController.getUser);
 
+router.get('/clients/:id', auth, userController.getClientsFisio);
+
 router.post('/', auth, userController.createUser);
 
 router.patch('/', auth, userController.updateUser);

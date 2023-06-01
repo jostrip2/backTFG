@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         dia: {
             type: DataTypes.DATEONLY,
-            allowNull: false,
             primaryKey: true
         },
         realitzat: {
